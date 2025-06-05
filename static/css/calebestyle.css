@@ -81,3 +81,42 @@ button:hover {
     background-color: #e8f5e9; /* Verde claro */
     color: #2e7d32; /* Verde escuro */
 }
+/* static/css/calebestyle.css */
+
+/* Estilos para agrupar campos de peso e altura na mesma linha */
+.input-inline-group {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px; /* Espaço entre os campos */
+}
+.input-inline-group .form-group {
+    flex: 1; /* Faz com que os campos ocupem o mesmo espaço */
+}
+
+/* Estilo para o campo de IMC quando é preenchido automaticamente (somente leitura) */
+#bmi[readonly] {
+    background-color: #e9ecef; /* Um cinza claro para indicar que é preenchido automaticamente */
+    cursor: default; /* Altera o cursor para o padrão, indicando que não é digitável */
+}
+
+/* Estilos para o resultado da previsão (melhora a visualização) */
+.result {
+    margin-top: 20px;
+    padding: 15px;
+    border-radius: 5px;
+    font-size: 1.1em;
+    font-weight: bold;
+    text-align: center;
+}
+
+.result.positive {
+    background-color: #ffe0e6; /* Um rosa claro para resultado positivo */
+    color: #dc3545; /* Vermelho */
+    border: 1px solid #dc3545;
+}
+
+.result.negative {
+    background-color: #e6ffe6; /* Um verde claro para resultado negativo */
+    color: #28a745; /* Verde */
+    border: 1px solid #28a745;
+}
