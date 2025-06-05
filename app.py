@@ -62,7 +62,7 @@ def pred_diabetCa():
         modelo = pickle.load(file)
 
     diabet_predic =modelo.predict([[age, gender, bmi, hypertension, heart_disease, smoking_history, hba1c_level, blood_glucose_level]])
-    return render_template_string(f"Não há indícios de diabetes." if diabet_predic[0] == 0 else f"Há indícios de diabetes. Por favor, consulte um médico.")
+    return render_template_string(f"Não há indícios de diabetes." if diabet_predic[1] == 1 else f"Há indícios de diabetes. Por favor, consulte um médico.")
 
 
 if __name__ == '__main__':
