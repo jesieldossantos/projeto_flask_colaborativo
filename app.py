@@ -61,9 +61,21 @@ def pred_diabetCa():
 
         modelo = pickle.load(file)
 
-    diabet_predic =modelo.predict([[age, gender, bmi, hypertension, heart_disease, smoking_history, hba1c_level, blood_glucose_level]])
-    return render_template_string(f"Não há indícios de diabetes." if diabet_predic[0] == 0 else f"Há indícios de diabetes. Por favor, consulte um médico.")
+    features = [[
+            age, gender, bmi, hypertension, heart_disease,
+            smoking_history, hba1c_level, blood_glucose_level
+        ]]
+    diabet_predic = modelo.predict(features)
+    diabetes_status = diabet_predic[0] # Armazenamos o 0 ou 1 aqui
 
+    # 3. Resposta Aprimorada (renderizando o template HTML)
+    if diabetes_status == 0:
+        message = "Não há indícios de diabetes."
+    else:
+        message = "Há indícios de diabetes. Por favor, consulte um médico."
+
+    # Passamos a mensagem e o status para o template HTML
+    return render_template('resul_pred_calebe.html', message=message, diabetes_status=diabetes_status)
 
 if __name__ == '__main__':
     app.run(debug=True)
