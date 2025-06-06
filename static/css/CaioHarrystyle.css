@@ -1,0 +1,115 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+.roboto-harrys {
+    font-family: "Roboto", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 600;
+    font-style: normal;
+    font-variation-settings:
+      "wdth" 100;
+  }
+  body {
+    position: relative;
+    font-family: 'Segoe UI', sans-serif;
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+    color: #e5e5e5;
+    overflow-x: hidden;
+    background-color: black;
+  }
+  
+  body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background: url("../img/CaioHarrys_img/bg-img.jpg") no-repeat center center;
+    background-size: cover;
+    filter: blur(5px) brightness(0.6);
+    z-index: -1;
+  }
+  
+  h1 {
+    color: #f2eeee;
+  }
+  
+
+.card {
+  background-color: #181818;
+  border-radius: 10px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  color: #fff;
+  width: 220px;
+  overflow: hidden;
+  padding: 0;
+}
+
+.card:hover {
+  transform: scale(1.08);
+  box-shadow: 0 0 20px rgba(229, 9, 20, 0.4);
+  z-index: 10;
+}
+
+.poster {
+  width: 100%;
+  height: 300px;
+  object-fit: cover;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+}
+
+.card-body {
+  padding: 10px 15px;
+}
+
+.card h6 {
+  font-size: 1rem;
+  margin-top: 5px;
+  font-weight: bold;
+}
+
+.card p {
+  font-size: 0.85rem;
+  margin-bottom: 5px;
+}
+  
+  .btn-primary {
+    background-color: #e50914;
+    border: none;
+    font-weight: bold;
+  }
+  
+  .btn-primary:hover {
+    background-color: #b00610;
+  }
+  
+  input.form-control {
+    background-color: #333;
+    color: white;
+    border: 1px solid #555;
+  }
+  
+  input.form-control::placeholder {
+    color: #aaa;
+  }
+  .error-msg {
+    color: #e63946;
+  }
+  #resultados {
+    padding: 0 10px;
+  }
+  .text-centro{
+    text-align: center;
+  }
+  @media (max-width: 1200px) {
+    #resultados .card {
+      width: 350px;
+    }
+  }
+  @media (max-width: 768px) {
+    #resultados .card {
+      width: 250px;
+    }
+  }
