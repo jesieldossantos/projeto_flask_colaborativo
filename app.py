@@ -16,11 +16,7 @@ def home():
 
 @app.route("/<usuario>")
 def rota_usuario(usuario):
-    dados = dados_personalizados.get(usuario, {"titulo": f"Perfil de {usuario}", "conteudo": "Nenhum dado específico disponível."})
-    try:
-        return render_template(f"{usuario}.html",  dados=dados)
-    except TemplateNotFound:
-        return render_template_string(f"<h1>{dados['titulo']}</h1><p>{dados['conteudo']}</p>") 
+    return render_template(f"{usuario.lower()}.html")
 
 
 @app.route("/lucianolpsf/fruta", methods=['POST'])
@@ -34,6 +30,7 @@ def pred_fruta():
 
     fruta =modelo.predict([[peso, textura]])
     return render_template_string(f'sua fruta é: {fruta[0]}')
+
 
 @app.route("/CalebeGomes740/Predição-de-Diabetes-Calebe", methods=['POST'])
 def pred_diabetCa():
@@ -76,6 +73,7 @@ def pred_diabetCa():
 
     # Passamos a mensagem e o status para o template HTML
     return render_template('resul_pred_calebe.html', message=message, diabetes_status=diabetes_status)
+
 
 if __name__ == '__main__':
     app.run(debug=True)
