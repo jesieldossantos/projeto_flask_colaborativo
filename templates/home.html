@@ -17,20 +17,24 @@
     <main class="container">
         {% for membro in membros %}
         <div class="card">
-            <img src="{{ membro.avatar_url }}" alt="Foto de {{ membro.name }}" class="avatar">
-            <h3>{{ membro.name or membro.login }}</h3>
-            <p>{{ membro.bio or "" }}</p>
-            <div class="links">
-                <a href="https://github.com/{{ membro.login }}" target="_blank" title="GitHub">
-                    <img src="{{ url_for('static', filename='img/icons8-github-48.png') }}" class="icon" alt="GitHub">
-                </a>
-                {% if membro.blog and 'linkedin.com' in membro.blog %}
-                <a href="{{ membro.blog }}" target="_blank" title="LinkedIn">
-                    <img src="{{ url_for('static', filename='img/icons8-linkedin-48.png') }}" class="icon" alt="LinkedIn">
-                </a>
-                {% endif %}
+            <div>
+                <img src="{{ membro.avatar_url }}" alt="Foto de {{ membro.name }}" class="avatar">
+                <h3>{{ membro.name or membro.login }}</h3>
             </div>
-            <a href="/{{ membro.login }}" class="btn" target="_blank">Ver Projeto</a>
+            <p>{{ membro.bio or "" }}</p>
+            <div>
+                <div class="links">
+                    <a href="https://github.com/{{ membro.login }}" target="_blank" title="GitHub">
+                        <img src="{{ url_for('static', filename='img/icons8-github-48.png') }}" class="icon" alt="GitHub">
+                    </a>
+                    {% if membro.blog and 'linkedin.com' in membro.blog %}
+                    <a href="{{ membro.blog }}" target="_blank" title="LinkedIn">
+                        <img src="{{ url_for('static', filename='img/icons8-linkedin-48.png') }}" class="icon" alt="LinkedIn">
+                    </a>
+                    {% endif %}
+                </div>
+                <a href="/{{ membro.login }}" class="btn" target="_blank">Ver Projeto</a>
+            </div>        
         </div>
         {% endfor %}
     </main>
