@@ -94,6 +94,7 @@
 
     <script>
         // Get DOM elements
+        const ageInput = document.getElementById('age'); // Added age input
         const weightInput = document.getElementById('weight');
         const heightInput = document.getElementById('height');
         const bmiInput = document.getElementById('bmi');
@@ -107,38 +108,54 @@
 
             if (weight > 0 && height > 0) {
                 const bmi = weight / (height * height);
-                bmiInput.value = bmi.toFixed(2); // Update BMI field with 2 decimal places
+                bmiInput.value = bmi.toFixed(2);
             } else {
-                bmiInput.value = ''; // Clear the field if values are invalid
+                bmiInput.value = '';
             }
         }
 
-        // Function to set default blood glucose level based on type
+        // Function to set default blood glucose level based on type and age
         function updateBloodGlucoseLevel() {
+            const age = parseInt(ageInput.value);
             const glucoseType = glucoseTypeSelect.value;
-            if (glucoseType === 'fasting') {
-                bloodGlucoseLevelInput.value = '85'; // Default for fasting
-            } else if (glucoseType === 'non_fasting') {
-                bloodGlucoseLevelInput.value = '120'; // Default for non-fasting
-            } else {
-                bloodGlucoseLevelInput.value = ''; // Clear if no option is selected
+            let defaultValue = '';
+
+            if (isNaN(age) || age <= 0) { // If age is not a valid number or 0
+                bloodGlucoseLevelInput.value = ''; // Clear the glucose level
+                return;
             }
+
+            if (glucoseType === 'fasting') {
+                if (age >= 18 && age <= 50) {
+                    defaultValue = '85'; // Example for young adults
+                } else if (age > 50) {
+                    defaultValue = '90'; // Slightly higher for older adults, still normal
+                } else { // For ages less than 18, clear or set a different default if desired
+                    defaultValue = '80'; // Example for children/teenagers
+                }
+            } else if (glucoseType === 'non_fasting') {
+                if (age >= 18 && age <= 50) {
+                    defaultValue = '120'; // Example for young adults
+                } else if (age > 50) {
+                    defaultValue = '130'; // Slightly higher for older adults, still normal
+                } else { // For ages less than 18
+                    defaultValue = '110'; // Example for children/teenagers
+                }
+            }
+            bloodGlucoseLevelInput.value = defaultValue;
         }
 
-        // Add event listeners for when weight or height change
+        // Add event listeners
         weightInput.addEventListener('input', updateBmi);
         heightInput.addEventListener('input', updateBmi);
-
-        // Add event listener for when glucose type changes
         glucoseTypeSelect.addEventListener('change', updateBloodGlucoseLevel);
+        ageInput.addEventListener('input', updateBloodGlucoseLevel); // New: Listen for age changes
 
-        // Optional: Call functions once when the page loads if there are already values (e.g., in case of form error)
+        // Call functions once when the page loads
         document.addEventListener('DOMContentLoaded', () => {
             updateBmi();
-            // Do not call updateBloodGlucoseLevel on DOMContentLoaded if you want the user to explicitly select
-            // or if the server might pre-fill a value. If you want a default to show even before user interaction,
-            // you might uncomment the line below or set a default in the HTML itself for the select.
-            // updateBloodGlucoseLevel();
+            // Call updateBloodGlucoseLevel to set a default if age and glucose type are pre-filled or selected on load
+            updateBloodGlucoseLevel();
         });
     </script>
 </body>
