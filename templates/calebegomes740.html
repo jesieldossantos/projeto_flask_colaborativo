@@ -36,7 +36,7 @@
             <div class="form-group">
                 <label for="bmi">IMC (Índice de Massa Corporal):</label>
                 <input type="number" id="bmi" name="bmi" step="0.01" min="10" max="60" required readonly>
-                </div>
+            </div>
 
             <div class="form-group">
                 <label for="hypertension">Hipertensão:</label>
@@ -68,13 +68,21 @@
             </div>
             <div class="form-group">
                 <label for="hba1c_level">Nível de HbA1c:</label>
-                <input type="number" id="hba1c_level" name="hba1c_level" step="0.01" min="3.0" max="15.0" required>
+                <input type="number" id="hba1c_level" name="hba1c_level" step="0.01" min="3.0" max="15.0" required placeholder="Ex: <5.7 (Normal), 5.7-6.4 (Pré-diabetes), >6.5 (Diabetes)">
             </div>
             <div class="form-group">
-                <label for="blood_glucose_level">Nível de Glicose no Sangue:</label>
+                <label for="glucose_type">Estado de Glicose:</label>
+                <select id="glucose_type" name="glucose_type" required>
+                    <option value="">Selecione</option>
+                    <option value="fasting">Jejum</option>
+                    <option value="non_fasting">Sem Jejum</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="blood_glucose_level">Nível de Glicose no Sangue (mg/dL):</label>
                 <input type="number" id="blood_glucose_level" name="blood_glucose_level" step="0.01" min="50" max="300" required>
             </div>
-            <button ttype="submi">Prever Diabetes</button>
+            <button type="submit">Prever Diabetes</button>
         </form>
 
         {% if prediction_text %}
@@ -85,31 +93,70 @@
     </div>
 
     <script>
-        // Obtenha os elementos DOM
+        // Get DOM elements
+        const ageInput = document.getElementById('age'); // Added age input
         const weightInput = document.getElementById('weight');
         const heightInput = document.getElementById('height');
         const bmiInput = document.getElementById('bmi');
+        const glucoseTypeSelect = document.getElementById('glucose_type');
+        const bloodGlucoseLevelInput = document.getElementById('blood_glucose_level');
 
-        // Função para calcular e atualizar o IMC
+        // Function to calculate and update BMI
         function updateBmi() {
             const weight = parseFloat(weightInput.value);
             const height = parseFloat(heightInput.value);
 
             if (weight > 0 && height > 0) {
                 const bmi = weight / (height * height);
-                bmiInput.value = bmi.toFixed(2); // Atualiza o campo IMC com 2 casas decimais
+                bmiInput.value = bmi.toFixed(2);
             } else {
-                bmiInput.value = ''; // Limpa o campo se os valores forem inválidos
+                bmiInput.value = '';
             }
         }
 
-        // Adiciona "ouvintes" de eventos para quando o peso ou altura mudarem
+        // Function to set default blood glucose level based on type and age
+        function updateBloodGlucoseLevel() {
+            const age = parseInt(ageInput.value);
+            const glucoseType = glucoseTypeSelect.value;
+            let defaultValue = '';
+
+            if (isNaN(age) || age <= 0) { // If age is not a valid number or 0
+                bloodGlucoseLevelInput.value = ''; // Clear the glucose level
+                return;
+            }
+
+            if (glucoseType === 'fasting') {
+                if (age >= 18 && age <= 50) {
+                    defaultValue = '85'; // Example for young adults
+                } else if (age > 50) {
+                    defaultValue = '90'; // Slightly higher for older adults, still normal
+                } else { // For ages less than 18, clear or set a different default if desired
+                    defaultValue = '80'; // Example for children/teenagers
+                }
+            } else if (glucoseType === 'non_fasting') {
+                if (age >= 18 && age <= 50) {
+                    defaultValue = '120'; // Example for young adults
+                } else if (age > 50) {
+                    defaultValue = '130'; // Slightly higher for older adults, still normal
+                } else { // For ages less than 18
+                    defaultValue = '110'; // Example for children/teenagers
+                }
+            }
+            bloodGlucoseLevelInput.value = defaultValue;
+        }
+
+        // Add event listeners
         weightInput.addEventListener('input', updateBmi);
         heightInput.addEventListener('input', updateBmi);
+        glucoseTypeSelect.addEventListener('change', updateBloodGlucoseLevel);
+        ageInput.addEventListener('input', updateBloodGlucoseLevel); // New: Listen for age changes
 
-        // Opcional: Chama a função uma vez ao carregar a página se já houver valores (ex: em caso de erro de formulário)
-        document.addEventListener('DOMContentLoaded', updateBmi);
-
+        // Call functions once when the page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            updateBmi();
+            // Call updateBloodGlucoseLevel to set a default if age and glucose type are pre-filled or selected on load
+            updateBloodGlucoseLevel();
+        });
     </script>
 </body>
 </html>
