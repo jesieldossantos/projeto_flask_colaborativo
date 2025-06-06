@@ -16,11 +16,7 @@ def home():
 
 @app.route("/<usuario>")
 def rota_usuario(usuario):
-    dados = dados_personalizados.get(usuario, {"titulo": f"Perfil de {usuario}", "conteudo": "Nenhum dado específico disponível."})
-    try:
-        return render_template(f"{usuario}.html",  dados=dados)
-    except TemplateNotFound:
-        return render_template_string(f"<h1>{dados['titulo']}</h1><p>{dados['conteudo']}</p>") 
+    return render_template(f"{usuario.lower()}.html")
 
 
 @app.route("/lucianolpsf/fruta", methods=['POST'])
