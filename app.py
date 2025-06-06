@@ -1,8 +1,13 @@
-from flask import Flask, render_template, render_template_string, request
+from flask import Flask, jsonify, render_template, render_template_string, request
 from jinja2 import TemplateNotFound
 from service.github import obter_dados_github 
 from dados import dados_personalizados
 import pickle
+from flask_cors import CORS
+import pandas as pd
+import numpy as np
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.metrics.pairwise import cosine_similarity
 
 app = Flask(__name__)
 usuarios = ["lucianolpsf", "fernandallobao", "jesieldossantos", "Victorrezende19", "calebegomes740", "CaioHarrys", "aucelio0", "brunofluna", "Rafael-ai13", "Xandy77", "pauloalvezz" ] 
@@ -73,6 +78,46 @@ def pred_diabetCa():
 
     # Passamos a mensagem e o status para o template HTML
     return render_template('resul_pred_calebe.html', message=message, diabetes_status=diabetes_status)
+CORS(app)
+
+# Carregar o dataset
+df = pd.read_csv("analises/Caio_Harrys/meu_dataset_completo.csv")
+df_filtrado = df.dropna(subset=["plot", "poster"]).reset_index(drop=True)
+
+# Criar matriz TF-IDF
+vectorizer = TfidfVectorizer(stop_words='english')
+tfidf_matrix = vectorizer.fit_transform(df_filtrado['plot'])
+
+
+def recomendar_filmes(titulos_usuario, top_n=9):
+    indices_input = []
+    for titulo in titulos_usuario:
+        match = df_filtrado[df_filtrado['title'].str.lower() == titulo.lower()]
+        if match.empty:
+            raise ValueError(f"Título '{titulo}' não encontrado no dataset com imagem.")
+        indices_input.append(match.index[0])
+
+    vetor_soma = np.asarray(np.sum(tfidf_matrix[indices_input], axis=0))
+    similaridades = cosine_similarity(vetor_soma, tfidf_matrix).flatten()
+    indices_recomendados = np.argsort(similaridades)[::-1]
+    indices_recomendados = [idx for idx in indices_recomendados if idx not in indices_input][:top_n]
+
+    resultados = df_filtrado.loc[indices_recomendados, ['title', 'rating', 'plot', 'poster']]
+    return resultados.to_dict(orient='records')
+
+
+@app.route("/recomendar", methods=["POST"])
+def recomendar():
+    dados = request.get_json()
+    filmes = dados.get("filmes", [])
+
+    try:
+        resultados = recomendar_filmes(filmes)
+        return jsonify({"recomendacoes": resultados})
+    except Exception as e:
+        return jsonify({"erro": str(e)}), 400
+
+
 
 
 if __name__ == '__main__':
