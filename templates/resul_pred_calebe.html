@@ -45,7 +45,7 @@
         }
 
         .message-no-diabetes {
-            background-color: #e6ffee; /* Verde claro */
+            background-color: #e6ffe6; /* Verde claro */
             color: #28a745; /* Verde escuro */
             border: 1px solid #28a745;
         }
@@ -90,11 +90,11 @@
     <div class="container">
         <h1>Resultado da Predição de Diabetes</h1>
         <!-- A mensagem será inserida aqui pela Flask -->
-        <p class="message {{ 'message-no-diabetes' if diabetes_status == 0 else 'message-diabetes' }}">
+        <!-- Lógica de classe corrigida: se diabetes_status == 1 (não diabetes), aplica verde. Caso contrário (0, diabetes), aplica vermelho. -->
+        <p class="message {{ 'message-no-diabetes' if diabetes_status == 1 else 'message-diabetes' }}">
             {{ message }}
         </p>
         <a href="/calebegomes740" class="cta-button">Voltar</a>
-        <!-- Você pode mudar o href para a página inicial ou outro local -->
     </div>
 </body>
 </html>
