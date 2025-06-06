@@ -66,7 +66,7 @@ def pred_diabetCa():
     diabetes_status = diabet_predic[0] # Armazenamos o 0 ou 1 aqui
 
     # 3. Resposta Aprimorada (renderizando o template HTML)
-    if diabetes_status == 0:
+    if diabetes_status == 1:
         message = "Não há indícios de diabetes."
     else:
         message = "Há indícios de diabetes. Por favor, consulte um médico."
