@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Previsão de Sobrevivência - Titanic</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: auto;
+            padding: 20px;
+        }
+        label {
+            display: block;
+            margin-top: 15px;
+        }
+        input, select {
+            width: 100%;
+            padding: 8px;
+        }
+        button {
+            margin-top: 20px;
+            padding: 10px;
+            width: 100%;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .resultado {
+            margin-top: 30px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Previsão de Sobrevivência no Titanic</h2>
+
+    <form method="POST" action="Victorrezende19/titanic">
+        <label for="pclass">Classe do Passageiro (1ª, 2ª ou 3ª):</label>
+        <select name="Pclass" id="pclass">
+            <option value="1">1ª Classe</option>
+            <option value="2">2ª Classe</option>
+            <option value="3">3ª Classe</option>
+        </select>
+
+        <label for="age">Idade:</label>
+        <input type="number" step="any" name="Age" id="age" required>
+
+        <label for="sibsp">Número de irmãos/cônjuges a bordo:</label>
+        <input type="number" name="SibSp" id="sibsp" required>
+
+        <label for="parch">Número de pais/filhos a bordo:</label>
+        <input type="number" name="Parch" id="parch" required>
+
+        <label for="fare">Preço da passagem:</label>
+        <input type="number" step="any" name="Fare" id="fare" required>
+
+        <label for="sex">Sexo:</label>
+        <select name="Sex" id="sex">
+            <option value="male">Masculino</option>
+            <option value="female">Feminino</option>
+        </select>
+
+        <label for="embarked">Porto de embarque:</label>
+        <select name="Embarked" id="embarked">
+            <option value="S">Southampton</option>
+            <option value="C">Cherbourg</option>
+            <option value="Q">Queenstown</option>
+        </select>
+
+        <button type="submit">Prever Sobrevivência</button>
+    </form>
+
+    {% if resultado is not none %}
+        <div class="resultado">
+            Resultado da previsão: <strong>{{ resultado }}</strong>
+        </div>
+    {% endif %}
+
+</body>
+</html>
+
