@@ -19,6 +19,44 @@ def rota_usuario(usuario):
     return render_template(f"{usuario.lower()}.html")
 
 
+@app.route("/Victorrezende19/titanic", methods=['GET', 'POST'])
+def pred_titanic():
+    if request.method == 'POST':
+        try:
+            pclass = int(request.form['Pclass'])
+            age = float(request.form['Age'])
+            sibSp = int(request.form['SibSp'])
+            parch = int(request.form['Parch'])
+            fare = float(request.form['Fare'])
+            sex = request.form['Sex']
+            embarked = request.form['Embarked']
+
+            sex_encoded = 1 if sex == 'male' else 0  
+            embarked_Q = 1 if embarked == 'Q' else 0
+            embarked_S = 1 if embarked == 'S' else 0
+
+            features = [[pclass, age, sibSp, parch, fare, sex_encoded, embarked_Q, embarked_S]]
+
+            # Carregar modelo e scaler
+            with open('./analises/Victorrezende19/modelo_titanic.pkl', 'rb') as file:
+                knn = pickle.load(file)
+
+        
+
+            # Fazer a previsão
+            prediction = knn.predict(features)
+            resultado = 'Sobreviveu' if prediction == 1 else 'Não Sobreviveu'
+
+            return render_template('Victorrezende19.html', resultado=resultado)
+
+        except Exception as e:
+            return f"Ocorreu um erro ao processar a previsão: {e}"
+
+    return render_template('home.html', resultado=None)
+
+
+
+
 @app.route("/lucianolpsf/fruta", methods=['POST'])
 def pred_fruta():
     peso = int(request.form['peso'])
@@ -66,7 +104,7 @@ def pred_diabetCa():
     diabetes_status = diabet_predic[0] # Armazenamos o 0 ou 1 aqui
 
     # 3. Resposta Aprimorada (renderizando o template HTML)
-    if diabetes_status == 0:
+    if diabetes_status == 1:
         message = "Não há indícios de diabetes."
     else:
         message = "Há indícios de diabetes. Por favor, consulte um médico."
