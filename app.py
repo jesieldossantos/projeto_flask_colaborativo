@@ -74,6 +74,19 @@ def pred_diabetCa():
     # Passamos a mensagem e o status para o template HTML
     return render_template('resul_pred_calebe.html', message=message, diabetes_status=diabetes_status)
 
+@app.route("/Rafael-ai13/flores", methods=['POST'])
+def pred_flores():
+    comprimento_sepala = int(request.form['comprimento_sepala'])
+    largura_sepala = int(request.form['largura_sepala'])
+    comprimento_petala = int(request.form['comprimento_petala'])	
+    largura_petala  = int(request.form['largura_petala'])
+
+    with open('./analises/Rafael-ai13/predict_flores.pkl', 'rb') as file:
+
+        modelo = pickle.load(file)
+
+    flores =modelo.predict([[comprimento_sepala, largura_sepala, comprimento_petala, largura_petala]])
+    return render_template_string(f'sua flor é: {flores[0]}')
 
 if __name__ == '__main__':
     app.run(debug=True)
