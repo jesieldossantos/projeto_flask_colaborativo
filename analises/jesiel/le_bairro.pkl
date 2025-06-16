@@ -1,0 +1,2 @@
+with open('le_bairro.pkl', 'wb') as file:
+    pickle.dump(le_bairro, file)

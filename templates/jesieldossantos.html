@@ -1,6 +1,3 @@
-Aqui está o código melhorado com as melhorias 2, 3, 4 e 5:
-
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -8,79 +5,87 @@ Aqui está o código melhorado com as melhorias 2, 3, 4 e 5:
     <style>
         body {
             font-family: Arial, sans-serif;
-            margin: 20px;
+            margin: 10px;
         }
+
         label {
             display: block;
-            margin-bottom: 10px;
+            margin-bottom: 5px;
         }
+
         input[type="text"] {
             width: 100%;
-            height: 30px;
-            margin-bottom: 20px;
-            padding: 10px;
+            height: 25px;
+            margin-bottom: 10px;
+            padding: 5px;
             border: 1px solid #ccc;
         }
+
         select {
             width: 100%;
-            height: 30px;
-            margin-bottom: 20px;
-            padding: 10px;
+            height: 25px;
+            margin-bottom: 10px;
+            padding: 5px;
             border: 1px solid #ccc;
         }
+
         input[type="submit"] {
             width: 100%;
-            height: 40px;
+            height: 30px;
             background-color: #4CAF50;
             color: #fff;
-            padding: 10px;
+            padding: 5px;
             border: none;
             border-radius: 5px;
             cursor: pointer;
         }
+
         input[type="submit"]:hover {
             background-color: #3e8e41;
         }
-        @media only screen and (max-width: 600px) {
-            body {
-                margin: 10px;
-            }
-        }
     </style>
 </head>
+
 <body>
-    <h1>Indicação de Restaurantes</h1>
-    <form action="/predict" method="post" onsubmit="return validarFormulario()">
+    <h2>Indicação de Restaurantes</h2>
+    <form action="/jesieldossantos/analises/jesiel/mcdonalds" method="post" onsubmit="return validarFormulario()">
         <label for="cidade">Cidade:</label>
-        <input type="text" id="cidade" name="cidade" placeholder="Ex: São Paulo" required><br><br>
+        <input type="text" id="cidade" name="cidade" placeholder="Ex: São Paulo" required>
+
         <label for="bairro">Bairro:</label>
-        <input type="text" id="bairro" name="bairro" placeholder="Ex: Centro" required><br><br>
+        <input type="text" id="bairro" name="bairro" placeholder="Ex: Centro" required>
+
         <label for="wifi">Possui Wifi?</label>
         <select id="wifi" name="wifi" required>
             <option value="">Selecione uma opção</option>
             <option value="1">Sim</option>
             <option value="0">Não</option>
-        </select><br><br>
+        </select>
+
         <label for="acessibilidade">Possui Acessibilidade?</label>
         <select id="acessibilidade" name="acessibilidade" required>
             <option value="">Selecione uma opção</option>
             <option value="1">Sim</option>
             <option value="0">Não</option>
-        </select><br><br>
+        </select>
+
         <label for="delivery">Possui Delivery?</label>
         <select id="delivery" name="delivery" required>
             <option value="">Selecione uma opção</option>
             <option value="1">Sim</option>
             <option value="0">Não</option>
-        </select><br><br>
+        </select>
+
         <label for="servicos_com_tempo_extimado">Possui Serviços com Tempo Estimado?</label>
         <select id="servicos_com_tempo_extimado" name="servicos_com_tempo_extimado" required>
             <option value="">Selecione uma opção</option>
             <option value="1">Sim</option>
             <option value="0">Não</option>
-        </select><br><br>
+        </select>
+
         <input type="submit" value="Enviar">
     </form>
+
     <script>
         function validarFormulario() {
             var cidade = document.getElementById("cidade").value;
