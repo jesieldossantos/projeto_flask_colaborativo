@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Indicação de Restaurantes</title>
+    <title>Indicação de Restaurantes McDonald's</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -47,7 +47,7 @@
 </head>
 
 <body>
-    <h2>Indicação de Restaurantes</h2>
+    <h2>Indicação de Restaurantes McDonald's</h2>
     <form action="/jesieldossantos/analises/jesiel/mcdonalds" method="post" onsubmit="return validarFormulario()">
         <label for="cidade">Cidade:</label>
         <input type="text" id="cidade" name="cidade" placeholder="Ex: São Paulo" required>
@@ -90,7 +90,12 @@
         function validarFormulario() {
             var cidade = document.getElementById("cidade").value;
             var bairro = document.getElementById("bairro").value;
-            if (cidade == "" || bairro == "") {
+            var wifi = document.getElementById("wifi").value;
+            var acessibilidade = document.getElementById("acessibilidade").value;
+            var delivery = document.getElementById("delivery").value;
+            var servicos_com_tempo_extimado = document.getElementById("servicos_com_tempo_extimado").value;
+
+            if (cidade == "" || bairro == "" || wifi == "" || acessibilidade == "" || delivery == "" || servicos_com_tempo_extimado == "") {
                 alert("Por favor, preencha todos os campos.");
                 return false;
             }
@@ -100,3 +105,25 @@
 </body>
 </html>
 
+
+E aqui está o template para o resultado:
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Resultado</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <h2>Resultado</h2>
+    <p>O McDonald's {{ resultado }}.</p>
+    <a href="/jesieldossantos/analises/jesiel/mcdonalds">Voltar</a>
+</body>
+</html>

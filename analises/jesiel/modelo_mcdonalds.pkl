@@ -1,4 +1,0 @@
-import pickle
-
-with open('modelo_mcdonalds.pkl', 'wb') as file:
-    pickle.dump(rf, file)

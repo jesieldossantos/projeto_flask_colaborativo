@@ -6,6 +6,7 @@ import pickle
 from flask_cors import CORS
 import pandas as pd
 import numpy as np
+import os
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 
@@ -180,7 +181,6 @@ def pred_flores():
     nome_flor = nomes_flores.get(flores[0], "Flor desconhecida")
     return render_template_string(f'sua flor é: {nome_flor}')
 
-
 @app.route("/jesieldossantos/analises/jesiel/mcdonalds", methods=['POST'])
 def pred_mcdonalds():
     cidade = request.form['cidade']
@@ -191,23 +191,32 @@ def pred_mcdonalds():
     servicos_com_tempo_extimado = int(request.form['servicos_com_tempo_extimado'])
 
     # Carregar modelo e LabelEncoders
-    with open('./analises/jesiel/modelo_mcdonalds.pkl', 'rb') as file:
+    caminho_modelo = os.path.join(os.path.dirname(__file__), 'analise', 'Jesiel', 'treinamentomc.pkl')
+    with open(caminho_modelo, 'rb') as file:
         modelo = pickle.load(file)
-    with open('./analises/jesiel/le_cidade.pkl', 'rb') as file:
+    caminho_le_cidade = os.path.join(os.path.dirname(__file__), 'analise', 'Jesiel', 'le_cidade.pkl')
+    with open(caminho_le_cidade, 'rb') as file:
         le_cidade = pickle.load(file)
-    with open('./analises/jesiel/le_bairro.pkl', 'rb') as file:
+    caminho_le_bairro = os.path.join(os.path.dirname(__file__), 'analise', 'Jesiel', 'le_bairro.pkl')
+    with open(caminho_le_bairro, 'rb') as file:
         le_bairro = pickle.load(file)
+    caminho_scaler = os.path.join(os.path.dirname(__file__), 'analise', 'Jesiel', 'scaler.pkl')
+    with open(caminho_scaler, 'rb') as file:
+        scaler = pickle.load(file)
 
-    # Transformar cidade e bairro
+    # Transformar Cidade e Bairro
     cidade_encoded = le_cidade.transform([cidade])[0]
     bairro_encoded = le_bairro.transform([bairro])[0]
 
     # Fazer a previsão
     features = [[cidade_encoded, bairro_encoded, wifi, acessibilidade, delivery, servicos_com_tempo_extimado]]
-    prediction = modelo.predict(features)
-    resultado = 'Oferece café da manhã' if prediction[0] == 1 else 'Não oferece café da manhã'
+    features_scaled = scaler.transform(features)
+    prediction = modelo.predict(features_scaled)
+    resultado = 'Oferece serviço' if prediction[0] == 1 else 'Não oferece serviço'
 
     return render_template('resultado_mcdonalds.html', resultado=resultado)
 
 if __name__ == '__main__':
+
+
     app.run(debug=True)
