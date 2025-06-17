@@ -10,6 +10,7 @@ import os
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 
+
 app = Flask(__name__)
 usuarios = ["lucianolpsf", "fernandallobao", "jesieldossantos", "Victorrezende19", "calebegomes740", "CaioHarrys", "aucelio0", "brunofluna", "Rafael-ai13", "Xandy77", "pauloalvezz" ] 
 
@@ -181,6 +182,26 @@ def pred_flores():
     nome_flor = nomes_flores.get(flores[0], "Flor desconhecida")
     return render_template_string(f'sua flor é: {nome_flor}')
 
+import os
+import pickle
+from flask import Flask, request, render_template
+
+app = Flask(__name__)
+
+# Caminho base para os arquivos de modelo e encoders
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+PASTA_MODELOS = os.path.join(BASE_DIR, 'analises', 'jesiel')
+
+# Carregar modelo e encoders apenas uma vez
+with open(os.path.join(PASTA_MODELOS, 'treinamentomc.pkl'), 'rb') as file:
+    modelo = pickle.load(file)
+with open(os.path.join(PASTA_MODELOS, 'le_cidade.pkl'), 'rb') as file:
+    le_cidade = pickle.load(file)
+with open(os.path.join(PASTA_MODELOS, 'le_bairro.pkl'), 'rb') as file:
+    le_bairro = pickle.load(file)
+with open(os.path.join(PASTA_MODELOS, 'scaler.pkl'), 'rb') as file:
+    scaler = pickle.load(file)
+
 @app.route("/jesieldossantos/analises/jesiel/mcdonalds", methods=['POST'])
 def pred_mcdonalds():
     cidade = request.form['cidade']
@@ -189,20 +210,6 @@ def pred_mcdonalds():
     acessibilidade = int(request.form['acessibilidade'])
     delivery = int(request.form['delivery'])
     servicos_com_tempo_extimado = int(request.form['servicos_com_tempo_extimado'])
-
-    # Carregar modelo e LabelEncoders
-    caminho_modelo = os.path.join(os.path.dirname(__file__), 'analise', 'Jesiel', 'treinamentomc.pkl')
-    with open(caminho_modelo, 'rb') as file:
-        modelo = pickle.load(file)
-    caminho_le_cidade = os.path.join(os.path.dirname(__file__), 'analise', 'Jesiel', 'le_cidade.pkl')
-    with open(caminho_le_cidade, 'rb') as file:
-        le_cidade = pickle.load(file)
-    caminho_le_bairro = os.path.join(os.path.dirname(__file__), 'analise', 'Jesiel', 'le_bairro.pkl')
-    with open(caminho_le_bairro, 'rb') as file:
-        le_bairro = pickle.load(file)
-    caminho_scaler = os.path.join(os.path.dirname(__file__), 'analise', 'Jesiel', 'scaler.pkl')
-    with open(caminho_scaler, 'rb') as file:
-        scaler = pickle.load(file)
 
     # Transformar Cidade e Bairro
     cidade_encoded = le_cidade.transform([cidade])[0]
@@ -217,6 +224,5 @@ def pred_mcdonalds():
     return render_template('resultado_mcdonalds.html', resultado=resultado)
 
 if __name__ == '__main__':
-
 
     app.run(debug=True)
