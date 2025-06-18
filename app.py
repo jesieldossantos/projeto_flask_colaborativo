@@ -182,46 +182,37 @@ def pred_flores():
     nome_flor = nomes_flores.get(flores[0], "Flor desconhecida")
     return render_template_string(f'sua flor é: {nome_flor}')
 
-import os
-import pickle
-from flask import Flask, request, render_template
 
-app = Flask(__name__)
+@app.route("/jesieldossantos/analises/jesiel/mcdonalds", methods=["GET", "POST"])
+def prever():
+    if request.method == "POST":
+        servicos_com_Wifi = int(request.form["servicos_com_Wifi"])
+        Acessibilidade = int(request.form["Acessibilidade"])
+        Servicos_com_tempo_extimado = int(request.form["Servicos_com_tempo_extimado"])
 
-# Caminho base para os arquivos de modelo e encoders
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-PASTA_MODELOS = os.path.join(BASE_DIR, 'analises', 'jesiel')
+        # Carregar modelo e scaler
+        with open("treinamentomc.pkl", "rb") as file:
+            modelo = pickle.load(file)
+        with open("scaler.pkl", "rb") as file:
+            scaler = pickle.load(file)
 
-# Carregar modelo e encoders apenas uma vez
-with open(os.path.join(PASTA_MODELOS, 'treinamentomc.pkl'), 'rb') as file:
-    modelo = pickle.load(file)
-with open(os.path.join(PASTA_MODELOS, 'le_cidade.pkl'), 'rb') as file:
-    le_cidade = pickle.load(file)
-with open(os.path.join(PASTA_MODELOS, 'le_bairro.pkl'), 'rb') as file:
-    le_bairro = pickle.load(file)
-with open(os.path.join(PASTA_MODELOS, 'scaler.pkl'), 'rb') as file:
-    scaler = pickle.load(file)
+        # Fazer a previsão
+        features = np.array([[servicos_com_Wifi, Acessibilidade, 0, Servicos_com_tempo_extimado]])
+        features_scaled = scaler.transform(features)
+        prediction = modelo.predict(features_scaled)
+        resultado = "oferece delivery" if prediction[0] == 1 else "não oferece delivery"
 
-@app.route("/jesieldossantos/analises/jesiel/mcdonalds", methods=['POST'])
-def pred_mcdonalds():
-    cidade = request.form['cidade']
-    bairro = request.form['bairro']
-    wifi = int(request.form['wifi'])
-    acessibilidade = int(request.form['acessibilidade'])
-    delivery = int(request.form['delivery'])
-    servicos_com_tempo_extimado = int(request.form['servicos_com_tempo_extimado'])
+        return render_template("resultado_mcdonalds.html", resultado=resultado)
+    else:
+        return render_template("index.html")
 
-    # Transformar Cidade e Bairro
-    cidade_encoded = le_cidade.transform([cidade])[0]
-    bairro_encoded = le_bairro.transform([bairro])[0]
+if __name__ == "__main__":
+    app.run(debug=True)
 
-    # Fazer a previsão
-    features = [[cidade_encoded, bairro_encoded, wifi, acessibilidade, delivery, servicos_com_tempo_extimado]]
-    features_scaled = scaler.transform(features)
-    prediction = modelo.predict(features_scaled)
-    resultado = 'Oferece serviço' if prediction[0] == 1 else 'Não oferece serviço'
 
-    return render_template('resultado_mcdonalds.html', resultado=resultado)
+@app.route("/jesieldossantos/analises/jesiel/mcdonalds", methods=['GET'])
+def index():
+    return render_template('index.html')
 
 if __name__ == '__main__':
 

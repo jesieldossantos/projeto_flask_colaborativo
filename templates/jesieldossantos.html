@@ -1,18 +1,16 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Indicação de Restaurantes McDonald's</title>
+    <title>Previsão de Delivery McDonald's</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             margin: 10px;
         }
-
         label {
             display: block;
             margin-bottom: 5px;
         }
-
         input[type="text"] {
             width: 100%;
             height: 25px;
@@ -20,7 +18,6 @@
             padding: 5px;
             border: 1px solid #ccc;
         }
-
         select {
             width: 100%;
             height: 25px;
@@ -28,7 +25,6 @@
             padding: 5px;
             border: 1px solid #ccc;
         }
-
         input[type="submit"] {
             width: 100%;
             height: 30px;
@@ -39,91 +35,37 @@
             border-radius: 5px;
             cursor: pointer;
         }
-
         input[type="submit"]:hover {
             background-color: #3e8e41;
         }
     </style>
 </head>
-
 <body>
-    <h2>Indicação de Restaurantes McDonald's</h2>
-    <form action="/jesieldossantos/analises/jesiel/mcdonalds" method="post" onsubmit="return validarFormulario()">
-        <label for="cidade">Cidade:</label>
-        <input type="text" id="cidade" name="cidade" placeholder="Ex: São Paulo" required>
-
-        <label for="bairro">Bairro:</label>
-        <input type="text" id="bairro" name="bairro" placeholder="Ex: Centro" required>
-
-        <label for="wifi">Possui Wifi?</label>
-        <select id="wifi" name="wifi" required>
+    <h2>Previsão de Delivery McDonald's</h2>
+    <form action="/prever" method="post">
+        <label for="servicos_com_Wifi">Possui Wi-Fi?</label>
+        <select id="servicos_com_Wifi" name="servicos_com_Wifi" required>
             <option value="">Selecione uma opção</option>
             <option value="1">Sim</option>
             <option value="0">Não</option>
         </select>
-
-        <label for="acessibilidade">Possui Acessibilidade?</label>
-        <select id="acessibilidade" name="acessibilidade" required>
+        <label for="Acessibilidade">Possui Acessibilidade?</label>
+        <select id="Acessibilidade" name="Acessibilidade" required>
             <option value="">Selecione uma opção</option>
             <option value="1">Sim</option>
             <option value="0">Não</option>
         </select>
-
-        <label for="delivery">Possui Delivery?</label>
-        <select id="delivery" name="delivery" required>
+        <label for="Servicos_com_tempo_extimado">Possui Serviços com Tempo Estimado?</label>
+        <select id="Servicos_com_tempo_extimado" name="Servicos_com_tempo_extimado" required>
             <option value="">Selecione uma opção</option>
             <option value="1">Sim</option>
             <option value="0">Não</option>
         </select>
-
-        <label for="servicos_com_tempo_extimado">Possui Serviços com Tempo Estimado?</label>
-        <select id="servicos_com_tempo_extimado" name="servicos_com_tempo_extimado" required>
-            <option value="">Selecione uma opção</option>
-            <option value="1">Sim</option>
-            <option value="0">Não</option>
-        </select>
-
-        <input type="submit" value="Enviar">
+        <input type="submit" value="Prever">
     </form>
-
-    <script>
-        function validarFormulario() {
-            var cidade = document.getElementById("cidade").value;
-            var bairro = document.getElementById("bairro").value;
-            var wifi = document.getElementById("wifi").value;
-            var acessibilidade = document.getElementById("acessibilidade").value;
-            var delivery = document.getElementById("delivery").value;
-            var servicos_com_tempo_extimado = document.getElementById("servicos_com_tempo_extimado").value;
-
-            if (cidade == "" || bairro == "" || wifi == "" || acessibilidade == "" || delivery == "" || servicos_com_tempo_extimado == "") {
-                alert("Por favor, preencha todos os campos.");
-                return false;
-            }
-            return true;
-        }
-    </script>
-</body>
-</html>
-
-
-E aqui está o template para o resultado:
-
-
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Resultado</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 10px;
-        }
-    </style>
-</head>
-
-<body>
-    <h2>Resultado</h2>
-    <p>O McDonald's {{ resultado }}.</p>
-    <a href="/jesieldossantos/analises/jesiel/mcdonalds">Voltar</a>
+    {% if resultado %}
+        <h2>Resultado:</h2>
+        <p>{{ resultado }}</p>
+    {% endif %}
 </body>
 </html>
