@@ -189,31 +189,23 @@ def prever():
         servicos_com_Wifi = int(request.form["servicos_com_Wifi"])
         Acessibilidade = int(request.form["Acessibilidade"])
         Servicos_com_tempo_extimado = int(request.form["Servicos_com_tempo_extimado"])
-
+        
         # Carregar modelo e scaler
         with open("treinamentomc.pkl", "rb") as file:
             modelo = pickle.load(file)
         with open("scaler.pkl", "rb") as file:
             scaler = pickle.load(file)
-
+        
         # Fazer a previsão
         features = np.array([[servicos_com_Wifi, Acessibilidade, 0, Servicos_com_tempo_extimado]])
         features_scaled = scaler.transform(features)
         prediction = modelo.predict(features_scaled)
         resultado = "oferece delivery" if prediction[0] == 1 else "não oferece delivery"
-
         return render_template("resultado_mcdonalds.html", resultado=resultado)
     else:
         return render_template("index.html")
 
 if __name__ == "__main__":
-    app.run(debug=True)
 
-
-@app.route("/jesieldossantos/analises/jesiel/mcdonalds", methods=['GET'])
-def index():
-    return render_template('index.html')
-
-if __name__ == '__main__':
 
     app.run(debug=True)
